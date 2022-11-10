@@ -5,7 +5,7 @@ I decided to SELECT the HomeTeam and create a CASE statement to get the win, tie
 But for this query we are focusing on the loss record
 Then using that query as a subquery to COUNT the number of time a team has lost
 Create a CTE with the previous query and do the same when the team plays away from home
-Join both tables
+Join both tables by using the FULL OUTER JOIN
 Since Liverpool only lost once away from home, we can't add a null value with an integer so we use the IFNULL function
 And Liverpool is the only team missing so I used the COALESCE function
 Finally, we can save the query as view in BigQuery then join with the other views to create the final table

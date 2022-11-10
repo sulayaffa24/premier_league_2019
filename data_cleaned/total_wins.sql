@@ -1,3 +1,15 @@
+/*
+First, I wanted to create 2 CTEs 
+The first CTE is to get the win record at home and the second CTE is to get the win record away from home
+I decided to SELECT the HomeTeam and create a CASE statement to get the win, tie, loss record
+But for this query we are focusing on the win record
+Then using that query as a subquery to COUNT the number of time a team has won
+Create a CTE with the previous query and do the same when the team plays away from home
+Join both tables
+Finally, we can save the query as view in BigQuery then join with the other views to create the final table
+*/
+
+
 WITH home_win_record_CTE AS (
   SELECT HomeTeam, COUNT(Record) AS home_win_record
 FROM (

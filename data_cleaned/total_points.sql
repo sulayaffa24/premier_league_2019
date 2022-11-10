@@ -1,3 +1,12 @@
+/*
+First, I wanted to create 2 CTEs 
+The first CTE is to get the number of points at home and the second CTE is to get the number of points away from home
+A win equates to 3 points, and tie equate to a point and loss equate to 0 points
+I decided to SELECT the HomeTeam and create a CASE statement to get the SUM of points
+Join both tables
+Finally, we can save the query as view in BigQuery then join with the other views to create the final table
+*/
+
 WITH points_away_from_home_CTE AS (
   SELECT AwayTeam,
     SUM(CASE

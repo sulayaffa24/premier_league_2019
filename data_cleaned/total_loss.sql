@@ -8,6 +8,7 @@ Create a CTE with the previous query and do the same when the team plays away fr
 Join both tables
 Since Liverpool only lost once away from home, we can't add a null value with an integer so we use the IFNULL function
 And Liverpool is the only team missing so I used the COALESCE function
+Finally, we can save the query as view in BigQuery then join with the other views to create the final table
 */
 
 WITH home_loss_record_CTE AS (

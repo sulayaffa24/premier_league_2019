@@ -1,3 +1,8 @@
+/*
+Final Table
+Joined all the tables to get the final table
+*/
+
 SELECT w.HomeTeam AS Club, 
         mp.match_played AS games_played, 
         w.win_record AS wins, 

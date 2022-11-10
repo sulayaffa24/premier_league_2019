@@ -40,4 +40,4 @@ The top 10 teams accounted for 62.1% of all goals scored and 38.7% of goals conc
 - Arsenal
 - Everton
 
-Only 5 of those teams qualified for Europe. The champions Manchester City scored the highest number of goals (95) and conceded the second-lowest (23) one fewer than Liverpool that season, they also had the best goal-differential (72)
+All those teams except Everton qualified for Europe. The champions Manchester City scored the highest number of goals (95) and conceded the second-lowest (23) one fewer than Liverpool that season, they also had the best goal-differential (72)

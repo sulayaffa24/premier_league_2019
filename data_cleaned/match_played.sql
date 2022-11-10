@@ -2,7 +2,8 @@
 Using CTEs to get the number of games played at home and away from home.
 Using the COUNT function to count the number of games 
 Using the GROUP BY clause since we are using an aggregate function COUNT
-Finally, we can join the 2 CTEs and add the number of games played at home and away
+We can now join the 2 CTEs and add the number of games played at home and away
+Finally, we can save the query as view in BigQuery then join with the other views to create the final table
 */
 
 WITH home_games AS (

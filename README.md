@@ -1,4 +1,4 @@
-# The 2019 Premier League Season
+# The 2019 Premier League Season SQL and PowerBI Project
 
 >Here are the Top 6 clubs in England and the number of league titles they have won:
 
@@ -26,3 +26,18 @@ The season saw two aviation incidents involving Premier League personnel. On 27 
 
 ___
  
+
+### Finding the top 10 scoring teams and defensive teams using SQL and vizualizing it with PowerBI
+
+![image](https://user-images.githubusercontent.com/30465635/200998885-e35fd84f-ad14-47a9-bf36-29f292a6417a.png)
+
+The top 10 teams accounted for 62.1% of all goals scored and 38.7% of goals conceded. Only 6 teams were in both the top 10 attacking and defensive teams that year:
+
+- Manchester City
+- Liverpool
+- Chelsea
+- Tottenham
+- Arsenal
+- Everton
+
+Only 5 of those teams qualified for Europe. The champions Manchester City scored the highest number of goals (95) and conceded the second-lowest (23) one fewer than Liverpool that season, they also had the best goal-differential (72)

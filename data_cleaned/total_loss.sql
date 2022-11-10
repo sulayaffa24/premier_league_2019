@@ -1,3 +1,15 @@
+/*
+First, I wanted to create 2 CTEs 
+The first CTE is to get the loss record at home and the second CTE is to get the loss record away from home
+I decided to SELECT the HomeTeam and create a CASE statement to get the win, tie, loss record
+But for this query we are focusing on the loss record
+Then using that query as a subquery to COUNT the number of time a team has lost
+Create a CTE with the previous query and do the same when the team plays away from home
+Join both tables
+Since Liverpool only lost once away from home, we can't add a null value with an integer so we use the IFNULL function
+And Liverpool is the only team missing so I used the COALESCE function
+*/
+
 WITH home_loss_record_CTE AS (
   SELECT HomeTeam, COUNT(Record) AS home_loss_record
 FROM (

@@ -1,45 +1,297 @@
-# The 2019 Premier League Season SQL and PowerBI Project
+# 2018/19 Premier League SQL and Tableau Project
 
->Here are the Top 6 clubs in England and the number of league titles they have won:
+I will build the final table of the 2018/19 premier league table with the following columns:
 
-- **Arsenal** -> have won 13 league titles
-- **Chelsea** -> have won 6 league titles
-- **Liverpool** -> have won 19 league titles
-- **Manchester City** -> have won 8 league titles
-- **Manchester United** -> have won a record 20 league titles
-- **Tottenham** -> have won 2 league titles
+- Football Club
+- Number of matches played
+- Number of games won
+- Number of games tied
+- Number of games lost
+- Total points of the season
+- Number of goals 
+- Number of goals conceded
+- Goal difference
+
+### Number of Matches Played
 ___
 
->Season Summary from Wikipedia
+I will start with the number of matches played. Each team plays 38 games in total 19 games at home and 19 games away from home. I will first get the number of games played at home and a separate query to get the number of games played away from home. Later I will combine these queries using a `CTE` to get the total games played in the season.
 
-Manchester City claimed the league title on the final day of the season with a 4–1 win at Brighton & Hove Albion, finishing on 98 points after a run of 14 wins. Liverpool held a 7-point lead over Manchester City on 3 January, but finished runners-up with 97 points – the third highest total in Premier League history and the highest in English top-flight history for a second-placed team, having lost only one league match all season – to eventual champions City
+```sql
+WITH home_games_CTE AS (
+    SELECT hometeam, COUNT(*) AS number_of_games_played
+    FROM public.premier_league
+    GROUP BY hometeam
+),
+away_games_CTE AS (
+    SELECT awayteam, COUNT(*) AS number_of_games_played
+    FROM public.premier_league
+    GROUP BY awayteam
+)
 
-Chelsea and Tottenham Hotspur claimed the other two Champions League berths, finishing in third and fourth place respectively. Tottenham were in third place for much of the season and were considered potential title challengers until a 1–2 loss to Burnley in February. Chelsea would go on to win the season's UEFA Europa League, defeating Arsenal in the final 4–1. Arsenal had gone on a fourteen-game unbeaten run near the start of the season and began April in third place, but a run of four points in six matches saw them drop to fifth place, finishing outside of the Champions League spots.
+SELECT 
+    hometeam AS Club, 
+    hg.number_of_games_played + ag.number_of_games_played AS games_played
+FROM home_games_CTE hg
+JOIN away_games_CTE ag
+ON hg.hometeam = ag.awayteam
+```
 
-Manchester United's worst start to the season for 28 years led to the sacking of manager José Mourinho in December, with former player Ole Gunnar Solskjær replacing him, initially as a caretaker. Solskjær was appointed permanently after an impressive run of results which culminated in United's away goals victory over Paris Saint-Germain in the UEFA Champions League, but the team's poor form soon returned, and they eventually finished sixth after the team had won none of their final five league matches. Newly promoted Wolverhampton Wanderers achieved their highest finish since 1980 by finishing seventh, having taken points off every team in the league except Liverpool and Huddersfield Town. Their seventh-place finish was the highest for a newly promoted team since Ipswich Town finished 5th in the 2000–01 season.
+**Results**
 
-Huddersfield were the first team to be relegated, following their 0–2 defeat at Crystal Palace on 30 March 2019, coinciding with victories for Burnley and Southampton. They were relegated with six games remaining. This made Huddersfield the second team in Premier League history to be relegated before March ended, following Derby County in 2007–08. Fulham joined them after a 1–4 defeat at Watford on 2 April, relegated with five games remaining. Cardiff City were the final team to be relegated following a 2–3 loss at home to Crystal Palace on 4 May with one game remaining.
+Club | games_played|
+-----|-------------|
+Chelsea | 38       |
+Wolves | 38        |
+Bournemouth | 38   |
+Burnley | 38       |
+Chelsea | 38       |
+Everton | 38       |
+West Ham | 38      |
+Tottenham | 38     |
+Leicester | 38     |
+Huddersfield | 38  |
+Man United |  38   |
+Cardiff | 38       |
+Fulham | 38        |
+Liverpool | 38     |
+Crystal Palace | 38  |
+Arsenal | 38       |
+Brighton |  38    |
+Southampton | 38       |
+Watford | 38       |
+Newcastle | 38       |
+Man City | 38       |
 
-The fastest goal in Premier League history was scored this season on 23 April by Shane Long in a 1–1 draw between his side Southampton and Watford after 7.69 seconds. On 4 May 2019, Fulham's Harvey Elliott became the youngest ever Premier League player at 16 years and 30 days. Tottenham Hotspur had a run of 28 games without a draw, the longest ever recorded from the start of a Premier League season. Manchester City did not draw any of their final 30 matches.
 
-The season saw two aviation incidents involving Premier League personnel. On 27 October 2018, Leicester City owner Vichai Srivaddhanaprabha was killed in a helicopter crash outside the King Power Stadium, shortly after a 1–1 home draw against West Ham United. Almost three months later, on 21 January 2019, Cardiff City player Emiliano Sala, en route to join the club following his record signing from Nantes, died on board a Piper PA-46 Malibu aircraft that crashed off Alderney.
-
+### Number of Games Won
 ___
- 
 
-### Finding the top 10 scoring teams and defensive teams using SQL and vizualizing it with PowerBI
+Let's get the number of games won by each team, like the previous query we will start with the number of games won at home and then away from home and combine both queries to get the total games won in the season using a `CTE` just like the last query.
 
-![image](https://user-images.githubusercontent.com/30465635/200998885-e35fd84f-ad14-47a9-bf36-29f292a6417a.png)
+```sql
+WITH wins_at_home_CTE AS (
+    SELECT
+        hometeam,
+        COUNT(Record) AS Home_Win_Record
+    FROM (
+        SELECT 
+            hometeam,
+            CASE
+                WHEN fthg > ftag THEN 'Win'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Loss'
+            END AS Record
+        FROM public.premier_league
+    ) Home_Record
+    WHERE Record = 'Win'
+    GROUP BY hometeam 
+),
+wins_away_from_home_CTE AS (
+    SELECT
+        awayteam,
+        COUNT(Record) AS Away_Win_Record
+    FROM (
+        SELECT 
+            awayteam,
+            CASE
+                WHEN fthg < ftag THEN 'Win'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Loss'
+            END AS Record
+        FROM public.premier_league
+    ) Away_Record
+    WHERE Record = 'Win'
+    GROUP BY awayteam
+)
 
-The top 10 teams accounted for 62.1% of all goals scored and 38.7% of goals conceded. Only 6 teams were in both the top 10 attacking and defensive teams that year:
+SELECT
+    hometeam AS Club,
+    Home_Win_Record + Away_Win_Record AS win_record 
+FROM wins_at_home_CTE wah
+JOIN wins_away_from_home_CTE wafh
+ON wah.hometeam = wafh.awayteam
+ORDER BY win_record DESC
+```
 
-- Manchester City
-- Liverpool
-- Chelsea
-- Tottenham
-- Arsenal
-- Everton
+**Results**
 
-All those teams except Everton qualified for Europe. The champions Manchester City scored the highest number of goals (95) and conceded the second-lowest (23) one fewer than Liverpool that season, they also had the best goal-differential (72)
+Club | win_record|
+-----|-------------|
+Man City | 32      |
+Liverpool | 30     |
+Tottenham | 23     |
+Arsenal  |  21     |
+Chelsea | 21       |
+Man United | 19    |
+Wolves | 16        |
+Everton | 15       |
+West Ham |  15     |
+Leicester | 15     |
+Watford | 14       |
+Crystal Palace | 14   |
+Bournemouth | 13      |
+Newcastle | 12      |
+Burnley | 11      |
+Cardiff |  10     |
+Brighton |  9   |
+Southampton  |  9  |
+Fulham  | 7   |
+Huddersfield |  3  |
 
-![image](https://user-images.githubusercontent.com/30465635/201192090-449b9a1b-39bd-4597-9c0c-e4bfe6df54ef.png)
+### Number of Games tied
+___
+
+We would use the same method as the `win_record` queries
+
+```sql
+WITH home_draw_CTE AS (
+    SELECT
+        hometeam,
+        COUNT(Record) AS Home_Draw_Record
+    FROM (
+        SELECT 
+            hometeam,
+            CASE
+                WHEN fthg > ftag THEN 'Win'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Loss'
+            END AS Record
+        FROM public.premier_league
+    ) Home_Record
+    WHERE Record = 'Draw'
+    GROUP BY hometeam 
+),
+away_draw_CTE AS (
+    SELECT
+        awayteam,
+        COUNT(Record) AS Away_Draw_Record
+    FROM (
+        SELECT 
+            awayteam,
+            CASE
+                WHEN fthg < ftag THEN 'Win'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Loss'
+            END AS Record
+        FROM public.premier_league
+    ) Away_Record
+    WHERE Record = 'Draw'
+    GROUP BY awayteam
+)
+
+SELECT
+    COALESCE(hometeam,'Man City') AS Club,
+    COALESCE(Home_Draw_Record, 0) + COALESCE(Away_Draw_Record, 0) AS draw_record 
+FROM home_draw_CTE hd
+FULL OUTER JOIN away_draw_CTE ad
+ON hd.hometeam = ad.awayteam
+ORDER BY draw_record DESC
+
+```
+
+**Results**
+
+Club | tied_record|
+-----|-------------|
+Southampton | 12   |
+Wolves | 9         |
+Chelsea | 9        |
+Newcastle | 9      |
+Man United | 9     |
+Brighton | 9       |
+Everton | 9        |
+Watford | 8        |
+Leicester | 7      |
+Burnley  |  7      |
+Crystal Palace | 7  |
+Huddersfield |  7   |
+Arsenal    |   7    |
+Liverpool  |   7    |
+West Ham   |   7    |
+Bournemouth |   6   |
+Fulham      |   5   |
+Cardiff     |   4   |
+Tottenham   |   2   |
+Man City    |   2   |
+
+
+### Number of Games Lost
+___
+
+Number of games lost.
+
+```sql
+WITH home_loss_CTE AS (
+    SELECT
+        hometeam,
+        COUNT(Record) AS Home_Loss_Record
+    FROM (
+        SELECT 
+            hometeam,
+            CASE
+                WHEN fthg < ftag THEN 'Loss'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Win'
+            END AS Record
+        FROM public.premier_league
+    ) Home_Record
+    WHERE Record = 'Loss'
+    GROUP BY hometeam 
+),
+away_loss_CTE AS (
+    SELECT
+        awayteam,
+        COUNT(Record) AS Away_Loss_Record
+    FROM (
+        SELECT 
+            awayteam,
+            CASE
+                WHEN fthg > ftag THEN 'Loss'
+                WHEN fthg = ftag THEN 'Draw'
+                ELSE 'Win'
+            END AS Record
+        FROM public.premier_league
+    ) Away_Record
+    WHERE Record = 'Loss'
+    GROUP BY awayteam
+)
+
+SELECT
+    COALESCE(hometeam, 'Liverpool') AS Club,
+    COALESCE(Home_Loss_Record, 0) + COALESCE(Away_Loss_Record, 0) AS loss_record 
+FROM home_loss_CTE hl
+FULL OUTER JOIN away_loss_CTE al
+ON hl.hometeam = al.awayteam
+ORDER BY loss_record
+
+```
+
+**Results**
+
+Club | loss_record|
+-----|-------------|
+Liverpool | 1      |
+Man City | 4       |
+Chelsea | 8        |
+Arsenal  |  10     |
+Man United | 10    |
+Wolves  | 13       |
+Tottenham | 13     |
+Everton | 14       |
+Watford | 16       |
+West Ham | 16      |
+Leicester | 16     |
+Crystal Palace | 17      |
+Newcastle | 17      |
+Southampton  |  17  |
+Bournemouth | 19      |
+Burnley |   20      |
+Brighton |  20      |
+Cardiff  | 24       |
+Fulham   |  26      |
+Huddersfield  |  28 |
+
+### Total Points of the Season
+___
+

@@ -512,3 +512,9 @@ Brighton|  38  |   9   |    9    |   20   |    36    |      35        |        6
 Cardiff|  38  |   10   |    4    |   24   |    34    |      34        |        69      |      -35   |
 Fulham|  38  |   7   |    5    |   26   |    26    |      34        |        81      |      -47   |
 Huddersfield|  38  |   3   |    7    |   28   |    16    |      22        |        76      |      -54   |
+
+### Visualization of Manchester City's Dominance in Numbers
+![image](https://github.com/sulayaffa24/premier_league_2019/assets/30465635/c8416a27-6459-4b4e-a4d7-e65b87d1bdbd)
+
+**Here's the link to the Dashboard** 
+[Man City's Dominance in Numbers](https://public.tableau.com/app/profile/sulayman.yaffa/viz/ManCitysDominance/Dashboard1)
